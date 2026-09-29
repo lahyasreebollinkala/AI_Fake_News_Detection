@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Generated pipeline artifacts -----------------------------------------
+# Everything below is reproduced by the scripts in src/ and is not source.
+# Comment a line out if you want to commit a specific artifact (for example
+# models/best_model.pkl, which keeps the app runnable without a retrain).
+
+# Intermediate and cleaned corpora -- large, fully derivable
+data/GlobalFakeNews_Research2026_v1.csv
+data/cleaned_news.csv
+
+# Optional full-size raw sources (~117 MB combined)
+data/Fake.csv
+data/True.csv
+
+# Trained models and cached splits
+models/*.pkl
+
+# Metrics, profiles, figures and the local prediction log
+results/
+images/
+
+# Report build outputs. The editable sources (ieee_report.md and
+# ieee_report.tex) are tracked; these two are re-rendered from them by
+# `python -m src.report`.
+docs/ieee_report.html
+docs/ieee_report.pdf
+
+# Scratch
+*.tmp
+*.log
+sample_batch_input.csv

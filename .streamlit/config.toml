@@ -1,0 +1,114 @@
+# ---------------------------------------------------------------------------
+# Veritas theme -- light + dark variants.
+# Both blocks are defined so readers can switch modes from the settings menu.
+# ---------------------------------------------------------------------------
+
+[theme]
+baseRadius = "0.65rem"
+buttonRadius = "0.6rem"
+showWidgetBorder = true
+showSidebarBorder = true
+linkUnderline = false
+baseFontSize = 15
+
+font = "'Inter':https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+headingFont = "'Outfit':https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&display=swap"
+codeFont = "'JetBrains Mono':https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+codeFontSize = "0.82rem"
+
+headingFontSizes = ["2.1rem", "1.55rem", "1.2rem", "1.02rem", "0.9rem", "0.8rem"]
+headingFontWeights = [700, 600, 600, 600, 600, 600]
+
+# --- Brand palette ---------------------------------------------------------
+# Indigo is the neutral "system" accent; emerald = authentic, rose = fabricated.
+chartCategoricalColors = ["#4F46E5", "#0E9F6E", "#E11D48", "#0EA5E9", "#8B5CF6", "#D97706", "#6B7280"]
+chartSequentialColors = ["#EEF0FE", "#D9DDFC", "#BFC4FA", "#A3AAF7", "#868FF3", "#6A74EF", "#4F46E5", "#4038C8", "#332B9E", "#261F73"]
+
+[theme.light]
+primaryColor = "#4F46E5"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F6F7FB"
+textColor = "#1F2333"
+borderColor = "#E3E5EE"
+linkColor = "#4338CA"
+codeTextColor = "#1F2333"
+codeBackgroundColor = "#F1F2F7"
+
+redColor = "#E11D48"
+orangeColor = "#C2690B"
+yellowColor = "#A16207"
+greenColor = "#0E9F6E"
+blueColor = "#2563EB"
+violetColor = "#7C3AED"
+grayColor = "#5F6478"
+
+redBackgroundColor = "#FCE7EC"
+redTextColor = "#9F1239"
+greenBackgroundColor = "#DFF5EC"
+greenTextColor = "#046B4A"
+orangeBackgroundColor = "#FDF0DC"
+orangeTextColor = "#8A4B06"
+blueBackgroundColor = "#E2ECFD"
+blueTextColor = "#1D4ED8"
+violetBackgroundColor = "#EFE7FD"
+violetTextColor = "#5B21B6"
+
+dataframeBorderColor = "#E3E5EE"
+dataframeHeaderBackgroundColor = "#F6F7FB"
+
+[theme.light.sidebar]
+backgroundColor = "#FAFAFD"
+secondaryBackgroundColor = "#F1F2F7"
+textColor = "#1F2333"
+borderColor = "#E3E5EE"
+primaryColor = "#4F46E5"
+
+[theme.dark]
+primaryColor = "#818CF8"
+backgroundColor = "#0E1017"
+secondaryBackgroundColor = "#171A23"
+textColor = "#E7E9F2"
+borderColor = "#272B39"
+linkColor = "#A5B0FF"
+codeTextColor = "#E7E9F2"
+codeBackgroundColor = "#12151D"
+
+redColor = "#FB7185"
+orangeColor = "#FBBF24"
+yellowColor = "#FACC15"
+greenColor = "#34D399"
+blueColor = "#60A5FA"
+violetColor = "#A78BFA"
+grayColor = "#9AA0B4"
+
+redBackgroundColor = "#3B1220"
+redTextColor = "#FECDD6"
+greenBackgroundColor = "#0C2E23"
+greenTextColor = "#A7F3D0"
+orangeBackgroundColor = "#3A2708"
+orangeTextColor = "#FDE68A"
+blueBackgroundColor = "#13233F"
+blueTextColor = "#BFDBFE"
+violetBackgroundColor = "#241A44"
+violetTextColor = "#DDD6FE"
+
+dataframeBorderColor = "#272B39"
+dataframeHeaderBackgroundColor = "#171A23"
+
+[theme.dark.sidebar]
+backgroundColor = "#10131A"
+secondaryBackgroundColor = "#171A23"
+textColor = "#E7E9F2"
+borderColor = "#272B39"
+primaryColor = "#818CF8"
+
+# ---------------------------------------------------------------------------
+# Server defaults
+# ---------------------------------------------------------------------------
+[server]
+headless = true
+runOnSave = true
+maxUploadSize = 20
+
+[browser]
+gatherUsageStats = false

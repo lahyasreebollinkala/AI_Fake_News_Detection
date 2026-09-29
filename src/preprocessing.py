@@ -1,83 +1,53 @@
+"""Stage 2 -- NLP preprocessing.
+
+Applies the cleaning pipeline in :func:`src.utils.clean_text` to every
+``full_text`` value and writes ``data/cleaned_news.csv``. That file is the only
+input :mod:`src.feature_engineering` reads.
+
+Run with::
+
+    python -m src.preprocessing
+"""
+
+from __future__ import annotations
+
 import pandas as pd
-import re
-import string
-import nltk
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
 
-# Download required NLTK resources (only needed once)
-nltk.download("stopwords")
-nltk.download("wordnet")
-nltk.download("omw-1.4")
-
-# Load dataset
-df = pd.read_csv("data/GlobalFakeNews_Research2026_v1.csv")
-
-# Initialize tools
-lemmatizer = WordNetLemmatizer()
-stop_words = set(stopwords.words("english"))
+from src.config import CLEAN_DATA, ensure_dirs
+from src.utils import clean_series
 
 
-def clean_text(text):
-    """
-    Clean and preprocess news article text.
-    """
-
-    # Handle missing values
-    if pd.isna(text):
-        return ""
-
-    # Convert to lowercase
-    text = text.lower()
-
-    # Remove URLs
-    text = re.sub(r"http\S+|www\S+", "", text)
-
-    # Remove HTML tags
-    text = re.sub(r"<.*?>", "", text)
-
-    # Remove numbers
-    text = re.sub(r"\d+", "", text)
-
-    # Remove punctuation
-    text = text.translate(str.maketrans("", "", string.punctuation))
-
-    # Remove extra spaces
-    text = re.sub(r"\s+", " ", text).strip()
-
-    # Tokenization
-    words = text.split()
-
-    # Remove stopwords
-    words = [word for word in words if word not in stop_words]
-
-    # Lemmatization
-    words = [lemmatizer.lemmatize(word) for word in words]
-
-    return " ".join(words)
+def preprocess_frame(frame: pd.DataFrame, text_column: str = "full_text") -> pd.DataFrame:
+    """Return ``frame`` with an added ``clean_text`` column."""
+    result = frame.copy()
+    result["clean_text"] = clean_series(result[text_column])
+    return result
 
 
-print("=" * 60)
-print("Cleaning text...")
-print("=" * 60)
+def main() -> None:
+    from src.data_loader import load_prepared_frame
 
-# Apply preprocessing
-df["clean_text"] = df["full_text"].apply(clean_text)
+    ensure_dirs()
 
-# Save cleaned dataset
-df.to_csv("data/cleaned_news.csv", index=False)
+    print("=" * 66)
+    print("STAGE 2  |  NLP PREPROCESSING")
+    print("=" * 66)
 
-print("\nPreprocessing Completed Successfully!")
+    corpus = load_prepared_frame()
+    cleaned = preprocess_frame(corpus)
 
-print("\nOriginal Text:\n")
-print(df["full_text"].iloc[0][:300])
+    cleaned.to_csv(CLEAN_DATA, index=False)
 
-print("\n")
+    empty = int((cleaned["clean_text"].str.len() == 0).sum())
 
-print("Cleaned Text:\n")
-print(df["clean_text"].iloc[0][:300])
+    print(f"Rows processed        : {len(cleaned)}")
+    print(f"Rows with empty text  : {empty}")
+    print(f"Output                : {CLEAN_DATA}")
+    print("-" * 66)
+    print("Original :", str(cleaned["full_text"].iloc[0])[:160])
+    print("Cleaned  :", str(cleaned["clean_text"].iloc[0])[:160])
+    print("=" * 66)
 
-print("\n")
 
-print("Saved cleaned dataset as:")
-print("data/cleaned_news.csv")
+if __name__ == "__main__":
+    main()

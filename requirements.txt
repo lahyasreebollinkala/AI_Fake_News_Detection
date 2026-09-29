@@ -1,13 +1,32 @@
+# Veritas -- news authenticity analyzer
+#
+# Install with:  pip install -r requirements.txt
+#
+# Only the libraries the project actually imports are listed. Plotly, seaborn,
+# wordcloud, GitPython and requests were part of the previous build and are no
+# longer required: charts are rendered with Altair (bundled with Streamlit) and
+# the app makes no network calls.
+
+# --- Application ---------------------------------------------------------
 streamlit==1.60.0
-pandas>=2.2.0
-numpy>=1.26.0
-scikit-learn>=1.5.0
-scipy>=1.13.0
-plotly>=5.24.0
-joblib>=1.4.2
-nltk>=3.9.1
-matplotlib>=3.9.0
-seaborn>=0.13.2
-wordcloud>=1.9.3
-GitPython>=3.1.43
-requests>=2.32.3
+altair==6.2.2
+
+# --- Data ----------------------------------------------------------------
+pandas==3.0.3
+numpy==2.4.6
+
+# --- Machine learning ----------------------------------------------------
+scikit-learn==1.8.0
+scipy==1.17.1
+joblib==1.5.3
+
+# --- NLP -----------------------------------------------------------------
+nltk==3.10.1
+
+# --- Static figures written by the pipeline scripts ----------------------
+matplotlib==3.10.9
+
+# --- Test suite ----------------------------------------------------------
+# `python -m pytest tests` drives the end-to-end pipeline assertions and the
+# headless Streamlit route tests. The application itself does not import it.
+pytest==9.1.1
