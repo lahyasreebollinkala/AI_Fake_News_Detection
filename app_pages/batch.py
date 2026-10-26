@@ -9,7 +9,12 @@ from app.components.cards import kpi_strip
 from app.components.charts import histogram, label_split_chart
 from app.components.layout import empty_state, render_page_header
 from app.services.artifacts import load_bundle
-from app.services.inference import LOW_CONFIDENCE_BAND, analyze_frame
+from app.services.inference import (
+    LOW_CONFIDENCE_BAND,
+    MIN_WORDS_FOR_PREDICTION,
+    analyze_frame,
+    prepare_batch_frame,
+)
 
 bundle = load_bundle()
 
@@ -100,8 +105,32 @@ if uploaded is not None:
     )
 
     if run:
+        try:
+            prepared, skipped = prepare_batch_frame(
+                raw.head(MAX_ROWS), text_column, title_column
+            )
+        except KeyError as error:
+            st.error(str(error), icon=":material/error:")
+            st.stop()
+
+        if skipped:
+            st.warning(
+                f"{skipped:,} row(s) contained fewer than {MIN_WORDS_FOR_PREDICTION} "
+                "words and were not scored. Empty and near-empty records are skipped "
+                "instead of being given an unreliable verdict.",
+                icon=":material/filter_alt:",
+            )
+
+        if prepared.empty:
+            st.error(
+                f"None of the uploaded rows contain at least {MIN_WORDS_FOR_PREDICTION} "
+                "words of article text, so there is nothing to score.",
+                icon=":material/error:",
+            )
+            st.stop()
+
         with st.spinner("Scoring…"):
-            result = score(raw.head(MAX_ROWS), text_column, title_column)
+            result = score(prepared, text_column, title_column)
         st.session_state["batch_result"] = result
         st.toast(f"Scored {result.total:,} articles", icon=":material/task_alt:")
 

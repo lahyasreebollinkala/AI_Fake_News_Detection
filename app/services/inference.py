@@ -155,6 +155,51 @@ def analyze(
     )
 
 
+def prepare_batch_frame(
+    frame: pd.DataFrame,
+    text_column: str,
+    title_column: str | None = None,
+    min_words: int = MIN_WORDS_FOR_PREDICTION,
+) -> tuple[pd.DataFrame, int]:
+    """Keep only the rows that contain enough text to classify.
+
+    A CSV upload often contains blank rows, spacer rows or very short notes.
+    Vectorising those rows produces an empty document and a meaningless
+    prediction, so they are removed here and counted for the UI instead of
+    being scored silently.
+
+    Args:
+        frame: The uploaded dataframe.
+        text_column: Name of the column holding the article body.
+        title_column: Optional headline column, prepended to the body.
+        min_words: Minimum number of whitespace-separated words required.
+
+    Returns:
+        tuple: ``(usable_frame, skipped_count)`` with a fresh row index.
+
+    Raises:
+        KeyError: If ``text_column`` is not present in the frame.
+    """
+    if text_column not in frame.columns:
+        raise KeyError(f"Text column '{text_column}' is not present in the uploaded file.")
+
+    working = frame.copy()
+    if title_column and title_column in working.columns:
+        titles = working[title_column].fillna("").astype(str)
+    else:
+        titles = pd.Series("", index=working.index)
+
+    combined = [
+        f"{title}. {body}".strip() if title else str(body)
+        for title, body in zip(titles, working[text_column].fillna("").astype(str))
+    ]
+    keep = np.array([len(document.split()) >= min_words for document in combined])
+
+    usable = working.loc[keep].reset_index(drop=True)
+    skipped = int((~keep).sum())
+    return usable, skipped
+
+
 def analyze_frame(
     bundle: ModelBundle,
     frame: pd.DataFrame,
